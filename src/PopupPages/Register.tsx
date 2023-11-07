@@ -1,18 +1,15 @@
-import { ChangeEvent, FormEvent, useState, Dispatch, SetStateAction } from 'react'
-import { Page } from '../shared/types'
+import { ChangeEvent, FormEvent, useState } from 'react'
+import { Page } from '../enums'
 
 import {
     useMutation,
 } from 'react-query'
+import useNavigation from '../useNavigations'
 
-interface RegisterProps {
-    setPage: Dispatch<SetStateAction<Page>>;
-}
-
-function Register({ setPage }: RegisterProps) {
+function Register() {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
-
+    const setPage = useNavigation()
 
     const handleRegisterSubmit = async (e: FormEvent) => {
         e.preventDefault()
@@ -26,40 +23,40 @@ function Register({ setPage }: RegisterProps) {
         }
     })
 
+    return (
+        <>
+            <h1>Register</h1>
+            <form onSubmit={handleRegisterSubmit}>
+                <div>
+                    <label htmlFor="email">email</label>
+                    <input
+                        type="email"
+                        name="email"
+                        id="email"
+                        value={email}
+                        onChange={(e: ChangeEvent<HTMLInputElement>) => { setEmail(e.target.value) }}
+                    />
+                </div>
 
-    return (<>
-        <h1>Login</h1>
-        <form onSubmit={handleRegisterSubmit}>
+                <div>
+                    <label htmlFor="password">password</label>
+                    <input
+                        type="password"
+                        name="password"
+                        id="password"
+                        value={password}
+                        onChange={(e: ChangeEvent<HTMLInputElement>) => { setPassword(e.target.value) }}
+                    />
+                </div>
+                <button type="submit">Submit</button>
+            </form>
+
             <div>
-                <label htmlFor="email">email</label>
-                <input
-                    type="email"
-                    name="email"
-                    id="email"
-                    value={email}
-                    onChange={(e: ChangeEvent<HTMLInputElement>) => { setEmail(e.target.value) }}
-                />
+                <button onClick={() => setPage(Page.Login)}>
+                    Go to log in
+                </button>
             </div>
-
-            <div>
-                <label htmlFor="password">password</label>
-                <input
-                    type="password"
-                    name="password"
-                    id="password"
-                    value={password}
-                    onChange={(e: ChangeEvent<HTMLInputElement>) => { setPassword(e.target.value) }}
-                />
-            </div>
-            <button type="submit">Submit</button>
-        </form>
-
-        <div>
-            <button onClick={() => setPage(Page.Login)}>
-                Go to log in
-            </button>
-        </div>
-    </>
+        </>
     )
 }
 

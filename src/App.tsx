@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import {
   QueryClient,
   QueryClientProvider,
@@ -7,7 +6,9 @@ import './App.css'
 import Login from './PopupPages/Login'
 import Register from './PopupPages/Register'
 
-import { Page } from './shared/types'
+import { Page } from './enums'
+import { useState } from 'react'
+import { SetPageContext } from './Contexts'
 
 const queryClient = new QueryClient()
 
@@ -26,13 +27,17 @@ function EmailLinkerApp() {
 
   switch (page) {
     case Page.Login:
-      rendered = <Login setPage={setPage} />
+      rendered = <Login />
       break;
     case Page.Register:
-      rendered = <Register setPage={setPage} />
+      rendered = <Register />
   }
 
-  return rendered
+  return (
+    <SetPageContext.Provider value={setPage}>
+      {rendered}
+    </SetPageContext.Provider>
+  )
 }
 
 

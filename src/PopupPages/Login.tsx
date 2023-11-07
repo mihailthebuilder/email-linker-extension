@@ -1,18 +1,16 @@
-import { ChangeEvent, FormEvent, useState, Dispatch, SetStateAction } from 'react'
-import { Page } from '../shared/types'
+import { ChangeEvent, FormEvent, useState } from 'react'
+import { Page } from '../enums'
 
 import {
     useMutation,
 } from 'react-query'
+import useNavigation from '../useNavigations'
 
-interface LoginProps {
-    setPage: Dispatch<SetStateAction<Page>>;
-}
-
-function Login({ setPage }: LoginProps) {
+function Login() {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [, setAuthenticationToken] = useState("")
+    const setPage = useNavigation()
 
 
     const loginMutation = useMutation({
@@ -28,39 +26,40 @@ function Login({ setPage }: LoginProps) {
         loginMutation.mutate()
     }
 
-    return (<>
-        <h1>Login</h1>
-        <form onSubmit={handleLoginSubmit}>
-            <div>
-                <label htmlFor="email">email</label>
-                <input
-                    type="email"
-                    name="email"
-                    id="email"
-                    value={email}
-                    onChange={(e: ChangeEvent<HTMLInputElement>) => { setEmail(e.target.value) }}
-                />
-            </div>
+    return (
+        <>
+            <h1>Login</h1>
+            <form onSubmit={handleLoginSubmit}>
+                <div>
+                    <label htmlFor="email">email</label>
+                    <input
+                        type="email"
+                        name="email"
+                        id="email"
+                        value={email}
+                        onChange={(e: ChangeEvent<HTMLInputElement>) => { setEmail(e.target.value) }}
+                    />
+                </div>
+
+                <div>
+                    <label htmlFor="password">password</label>
+                    <input
+                        type="password"
+                        name="password"
+                        id="password"
+                        value={password}
+                        onChange={(e: ChangeEvent<HTMLInputElement>) => { setPassword(e.target.value) }}
+                    />
+                </div>
+                <button type="submit">Submit</button>
+            </form>
 
             <div>
-                <label htmlFor="password">password</label>
-                <input
-                    type="password"
-                    name="password"
-                    id="password"
-                    value={password}
-                    onChange={(e: ChangeEvent<HTMLInputElement>) => { setPassword(e.target.value) }}
-                />
+                <button onClick={() => setPage(Page.Register)}>
+                    Go to register
+                </button>
             </div>
-            <button type="submit">Submit</button>
-        </form>
-
-        <div>
-            <button onClick={() => setPage(Page.Register)}>
-                Go to register
-            </button>
-        </div>
-    </>
+        </>
     )
 }
 
