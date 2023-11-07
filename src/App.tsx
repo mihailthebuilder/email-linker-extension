@@ -1,44 +1,40 @@
-import { ChangeEvent, FormEvent, useState } from 'react'
+import { useState } from 'react'
+import {
+  QueryClient,
+  QueryClientProvider,
+} from 'react-query'
 import './App.css'
+import Login from './PopupPages/Login'
+import Register from './PopupPages/Register'
+
+import { Page } from './shared/types'
+
+const queryClient = new QueryClient()
 
 function App() {
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-
-  const handleSubmit = (e: FormEvent) => {
-    e.preventDefault()
-    console.log("submit", email, password)
-  }
-
   return (
-    <>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="email">email</label>
-          <input
-            type="email"
-            name="email"
-            id="email"
-            value={email}
-            onChange={(e: ChangeEvent<HTMLInputElement>) => { setEmail(e.target.value) }}
-          />
-        </div>
-
-        <div>
-          <label htmlFor="password">password</label>
-          <input
-            type="password"
-            name="password"
-            id="password"
-            value={password}
-            onChange={(e: ChangeEvent<HTMLInputElement>) => { setPassword(e.target.value) }}
-          />
-        </div>
-        <button type="submit">Submit</button>
-      </form>
-
-    </>
+    <QueryClientProvider client={queryClient}>
+      <EmailLinkerApp />
+    </QueryClientProvider>
   )
 }
+
+function EmailLinkerApp() {
+  const [page, setPage] = useState(Page.Login)
+
+  let rendered: React.ReactElement
+
+  switch (page) {
+    case Page.Login:
+      rendered = <Login setPage={setPage} />
+      break;
+    case Page.Register:
+      rendered = <Register setPage={setPage} />
+  }
+
+  return rendered
+}
+
+
 
 export default App
