@@ -12,12 +12,12 @@ function Register() {
   const setPage = useNavigation()
   const setNotification = useNotification()
 
-  const handleRegisterSubmit = async (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
-    registerMutation.mutate()
+    mutation.mutate()
   }
 
-  const registerMutation = useMutation({
+  const mutation = useMutation({
     mutationFn: () => { return register(email, password) },
     onSuccess: () => {
       setNotification("registration successful. please verify your email")
@@ -28,7 +28,7 @@ function Register() {
   return (
     <>
       <h1>Register</h1>
-      <form onSubmit={handleRegisterSubmit}>
+      <form onSubmit={handleSubmit}>
         <div>
           <label htmlFor="email">email</label>
           <input

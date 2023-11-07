@@ -13,7 +13,7 @@ function Login() {
   const setPage = useNavigation()
 
 
-  const loginMutation = useMutation({
+  const mutation = useMutation({
     mutationFn: () => { return fetchLoginAuthenticationToken(email, password) },
     onSuccess: (data) => {
       setAuthenticationToken(data)
@@ -21,15 +21,15 @@ function Login() {
     },
   })
 
-  const handleLoginSubmit = async (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
-    loginMutation.mutate()
+    mutation.mutate()
   }
 
   return (
     <>
       <h1>Login</h1>
-      <form onSubmit={handleLoginSubmit}>
+      <form onSubmit={handleSubmit}>
         <div>
           <label htmlFor="email">email</label>
           <input
