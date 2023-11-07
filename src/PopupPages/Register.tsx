@@ -4,12 +4,13 @@ import { Page } from '../enums'
 import {
   useMutation,
 } from 'react-query'
-import useNavigation from '../useNavigation'
+import { useNotification, useNavigation } from '../Contexts'
 
 function Register() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const setPage = useNavigation()
+  const setNotification = useNotification()
 
   const handleRegisterSubmit = async (e: FormEvent) => {
     e.preventDefault()
@@ -19,7 +20,8 @@ function Register() {
   const registerMutation = useMutation({
     mutationFn: () => { return register(email, password) },
     onSuccess: () => {
-      console.log("successfully registered")
+      setNotification("registration successful. please verify your email")
+      setPage(Page.Login)
     }
   })
 

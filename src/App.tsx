@@ -8,7 +8,8 @@ import Register from './PopupPages/Register'
 
 import { Page } from './enums'
 import { useState } from 'react'
-import { SetPageContext } from './Contexts'
+import { SetNotificationContext, SetPageContext } from './Contexts'
+import User from './PopupPages/User'
 
 const queryClient = new QueryClient()
 
@@ -22,20 +23,27 @@ function App() {
 
 function EmailLinkerApp() {
   const [page, setPage] = useState(Page.Login)
+  const [notification, setNotification] = useState("")
 
   let rendered: React.ReactElement
 
   switch (page) {
-    case Page.Login:
-      rendered = <Login />
-      break;
     case Page.Register:
       rendered = <Register />
+      break;
+    case Page.User:
+      rendered = <User />
+      break;
+    default:
+      rendered = <Login />
   }
 
   return (
     <SetPageContext.Provider value={setPage}>
-      {rendered}
+      <SetNotificationContext.Provider value={setNotification}>
+        {rendered}
+      </SetNotificationContext.Provider>
+      {notification.length > 0 && <div>{notification}</div>}
     </SetPageContext.Provider>
   )
 }

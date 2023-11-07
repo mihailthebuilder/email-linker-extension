@@ -4,12 +4,12 @@ import { Page } from '../enums'
 import {
   useMutation,
 } from 'react-query'
-import useNavigation from '../useNavigation'
+import { useNavigation } from '../Contexts'
 
 function Login() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
-  const [, setAuthenticationToken] = useState("")
+  const [_, setAuthenticationToken] = useState("")
   const setPage = useNavigation()
 
 
@@ -17,7 +17,7 @@ function Login() {
     mutationFn: () => { return fetchLoginAuthenticationToken(email, password) },
     onSuccess: (data) => {
       setAuthenticationToken(data)
-      console.log("authentication token updated to:", data)
+      setPage(Page.User)
     },
   })
 
