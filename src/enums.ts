@@ -1,3 +1,3 @@
-enum Page { Register, Login, User }
+enum Page { Register, Login, User, Loading }
 
 export { Page }
