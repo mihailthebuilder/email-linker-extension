@@ -9,14 +9,12 @@ import { useNavigation } from '../Contexts'
 function Login() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
-  const [_, setAuthenticationToken] = useState("")
   const setPage = useNavigation()
 
-
   const mutation = useMutation({
-    mutationFn: () => { return fetchLoginAuthenticationToken(email, password) },
-    onSuccess: (data) => {
-      setAuthenticationToken(data)
+    mutationFn: () => { return fetchAuthenticationToken(email, password) },
+    onSuccess: (token) => {
+      storeAuthenticationTokenInBrowser(token)
       setPage(Page.User)
     },
   })
@@ -63,8 +61,11 @@ function Login() {
   )
 }
 
+function storeAuthenticationTokenInBrowser(token: string) {
+  chrome.storage.local.set({ authenticationToken: token })
+}
 
-const fetchLoginAuthenticationToken = async (email: string, password: string) => {
+const fetchAuthenticationToken = async (email: string, password: string) => {
   const response = await fetch(import.meta.env.VITE_API_URL + "/auth/login", {
     method: "POST",
     headers: {
