@@ -10,6 +10,7 @@ import { Page } from './enums'
 import { useState, useEffect } from 'react'
 import { SetNotificationContext, SetPageContext } from './Contexts'
 import User from './PopupPages/User'
+import { jwtDecode } from "jwt-decode"
 import Loading from './PopupPages/Loading'
 
 const queryClient = new QueryClient()
@@ -38,14 +39,14 @@ function EmailLinkerApp() {
     async function getAuthenticationTokenFromBrowser() {
 
       const result = await chrome.storage.local.get(["authenticationToken"])
-      const token = result["authenticationToken"] as string
+      const token = result["authenticationToken"]
 
       if (typeof token !== "string") {
         setPage(Page.Login)
         return
       }
 
-      if (token.length === 0) {
+      if (!tokenIsValid(token)) {
         setPage(Page.Login)
         return
       }
@@ -67,6 +68,21 @@ function EmailLinkerApp() {
   )
 }
 
+function tokenIsValid(token: string): boolean {
+  if (token.length === 0) {
+    return false
+  }
 
+  const decodedToken = jwtDecode(token)
+  if (!decodedToken.exp) {
+    return false
+  }
+
+  if (Date.now() > decodedToken.exp * 1000) {
+    return false
+  }
+
+  return true
+}
 
 export default App
