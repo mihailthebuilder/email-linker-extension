@@ -5,16 +5,6 @@
   "action": {
     "default_popup": "index.html"
   },
-  "content_scripts": [
-    {
-      "js": [
-        "src/content.tsx"
-      ],
-      "matches": [
-        "https://*/*"
-      ]
-    }
-  ],
   "permissions": [
     "storage"
   ]
