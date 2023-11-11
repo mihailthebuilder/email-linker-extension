@@ -20,14 +20,19 @@ function User() {
         mutation.mutate()
     }
 
+    const onInputLinkChange = (event: React.FormEvent<HTMLInputElement>) => {
+        setLinkToTrack(event.currentTarget.value)
+        setTrackedLink("")
+    }
+
     return (
         <>
             <form onSubmit={handleSubmit}>
                 <label htmlFor="link">Link to track</label>
-                <input type="text" name="link" id="link" value={linkToTrack} onChange={(e) => { setLinkToTrack(e.target.value) }} />
+                <input type="text" name="link" id="link" value={linkToTrack} onChange={onInputLinkChange} />
                 <button type="submit">Submit</button>
             </form>
-            <div>Tracked link is {trackedLink}</div>
+            {trackedLink.length > 0 && <div>Tracked link is {trackedLink}</div>}
         </>
 
     )
