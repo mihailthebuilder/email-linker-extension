@@ -4,18 +4,18 @@ import { Page } from '../enums'
 import {
   useMutation,
 } from 'react-query'
-import { useNavigation } from '../Contexts'
+import { useAppState } from '../Contexts'
 
 function Login() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
-  const setPage = useNavigation()
+  const { appState, setAppState } = useAppState()
 
   const mutation = useMutation({
     mutationFn: () => { return fetchAuthenticationToken(email, password) },
-    onSuccess: (token) => {
-      storeAuthenticationTokenInBrowser(token)
-      setPage(Page.User)
+    onSuccess: async (token) => {
+      await storeAuthenticationTokenInBrowser(token)
+      setAppState(appState.withPage(Page.User).withAuthenticationToken(token).createNewState())
     },
   })
 
@@ -53,7 +53,7 @@ function Login() {
       </form>
 
       <div>
-        <button onClick={() => setPage(Page.Register)}>
+        <button onClick={() => setAppState(appState.withPage(Page.Register))}>
           Go to register
         </button>
       </div>
@@ -61,8 +61,8 @@ function Login() {
   )
 }
 
-function storeAuthenticationTokenInBrowser(token: string) {
-  chrome.storage.local.set({ authenticationToken: token })
+async function storeAuthenticationTokenInBrowser(token: string) {
+  await chrome.storage.local.set({ authenticationToken: token })
 }
 
 const fetchAuthenticationToken = async (email: string, password: string) => {

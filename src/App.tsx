@@ -8,10 +8,12 @@ import Register from './PopupPages/Register'
 
 import { Page } from './enums'
 import { useState, useEffect } from 'react'
-import { SetNotificationContext, SetPageContext } from './Contexts'
+import { AppContext } from './Contexts'
 import User from './PopupPages/User'
 import { jwtDecode } from "jwt-decode"
 import Loading from './PopupPages/Loading'
+
+import { AppState } from './Contexts'
 
 const queryClient = new QueryClient()
 
@@ -32,39 +34,29 @@ const RouteToPage: { [key in Page]: React.ReactElement } = {
 
 
 function EmailLinkerApp() {
-  const [page, setPage] = useState(Page.Loading)
-  const [notification, setNotification] = useState("")
+  const [appState, setAppState] = useState(new AppState())
 
   useEffect(() => {
     async function getAuthenticationTokenFromBrowser() {
-
       const result = await chrome.storage.local.get(["authenticationToken"])
       const token = result["authenticationToken"]
 
-      if (typeof token !== "string") {
-        setPage(Page.Login)
+      if (typeof token !== "string" || !tokenIsValid(token)) {
+        setAppState(appState.withPage(Page.Login).createNewState())
         return
       }
 
-      if (!tokenIsValid(token)) {
-        setPage(Page.Login)
-        return
-      }
-
-      setPage(Page.User)
+      setAppState(appState.withPage(Page.User).withAuthenticationToken(token).createNewState())
     }
 
     getAuthenticationTokenFromBrowser()
   }, [])
 
-
   return (
-    <SetPageContext.Provider value={setPage}>
-      <SetNotificationContext.Provider value={setNotification}>
-        {RouteToPage[page]}
-      </SetNotificationContext.Provider>
-      {notification.length > 0 && <div>{notification}</div>}
-    </SetPageContext.Provider>
+    <AppContext.Provider value={{ appState, setAppState }}>
+      {RouteToPage[appState.page]}
+      {appState.notification.length > 0 && <div>{appState.notification}</div>}
+    </ AppContext.Provider>
   )
 }
 
