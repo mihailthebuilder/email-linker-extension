@@ -26,7 +26,7 @@ function Login() {
 
   return (
     <>
-      <h1>Login</h1>
+      <h1 className='text-6xl'>Login</h1>
       <form onSubmit={handleSubmit}>
         <div>
           <label htmlFor="email">email</label>
