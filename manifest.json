@@ -1,11 +1,18 @@
 {
   "manifest_version": 3,
-  "name": "CRXJS React Vite Example",
+  "name": "Email Link Tracking",
   "version": "1.0.0",
   "action": {
     "default_popup": "index.html"
   },
   "permissions": [
     "storage"
-  ]
+  ],
+  "icons": {
+    "16": "public/black-hole-16.png",
+    "32": "public/black-hole-32.png",
+    "48": "public/black-hole-48.png",
+    "128": "public/black-hole-128.png"
+  },
+  "description": "The easiest way to track link clicks in the emails you send."
 }
