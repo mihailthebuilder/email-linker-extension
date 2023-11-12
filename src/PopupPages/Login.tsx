@@ -33,6 +33,9 @@ function Login() {
         <div>
           <TextInput
             type="email"
+            id="email"
+            name="email"
+            placeholder="email"
             value={email}
             onChange={(e: ChangeEvent<HTMLInputElement>) => { setEmail(e.target.value) }}
           />
@@ -41,6 +44,9 @@ function Login() {
         <div>
           <TextInput
             type="password"
+            id="password"
+            name="password"
+            placeholder="password"
             value={password}
             onChange={(e: ChangeEvent<HTMLInputElement>) => { setPassword(e.target.value) }}
           />
