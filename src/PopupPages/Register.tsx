@@ -59,7 +59,7 @@ function Register() {
       <Button
         type="button"
         onClick={() => {
-          setAppState(appState.withPage(Page.Login).createNewState())
+          setAppState(appState.withPage(Page.Login).withNotification("").createNewState())
         }}
       >
         Go to register

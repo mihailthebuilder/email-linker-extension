@@ -17,7 +17,7 @@ function Login() {
     mutationFn: () => { return fetchAuthenticationToken(email, password) },
     onSuccess: async (token) => {
       await storeAuthenticationTokenInBrowser(token)
-      setAppState(appState.withPage(Page.User).withAuthenticationToken(token).createNewState())
+      setAppState(appState.withPage(Page.User).withAuthenticationToken(token).withNotification("").createNewState())
     },
   })
 
@@ -51,7 +51,7 @@ function Login() {
         </div>
       </form>
       <Button type="button" onClick={() => {
-        setAppState(appState.withPage(Page.Register).createNewState())
+        setAppState(appState.withPage(Page.Register).withNotification("").createNewState())
       }}>Go to register</Button>
     </>
   )
