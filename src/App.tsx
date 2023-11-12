@@ -2,7 +2,6 @@ import {
   QueryClient,
   QueryClientProvider,
 } from 'react-query'
-import './App.css'
 import Login from './PopupPages/Login'
 import Register from './PopupPages/Register'
 
@@ -53,10 +52,12 @@ function EmailLinkerApp() {
   }, [])
 
   return (
-    <AppContext.Provider value={{ appState, setAppState }}>
-      {RouteToPage[appState.page]}
-      {appState.notification.length > 0 && <div>{appState.notification}</div>}
-    </ AppContext.Provider>
+    <main className="px-7 py-5 bg-cyan-950 text-[1.25rem] text-sky-50">
+      <AppContext.Provider value={{ appState, setAppState }}>
+        {RouteToPage[appState.page]}
+        {appState.notification.length > 0 && <div>{appState.notification}</div>}
+      </ AppContext.Provider>
+    </main>
   )
 }
 

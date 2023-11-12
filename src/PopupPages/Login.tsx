@@ -5,6 +5,8 @@ import {
   useMutation,
 } from 'react-query'
 import { useAppState } from '../Contexts'
+import TextInput from '../Components/TextInput/TextInput'
+import Button from '../Components/Button/Button'
 
 function Login() {
   const [email, setEmail] = useState("")
@@ -26,37 +28,31 @@ function Login() {
 
   return (
     <>
-      <h1 className='text-6xl'>Login</h1>
+      <h1 className="text-3xl font-bold mb-10">Login</h1>
       <form onSubmit={handleSubmit}>
         <div>
-          <label htmlFor="email">email</label>
-          <input
+          <TextInput
             type="email"
-            name="email"
-            id="email"
             value={email}
             onChange={(e: ChangeEvent<HTMLInputElement>) => { setEmail(e.target.value) }}
           />
         </div>
 
         <div>
-          <label htmlFor="password">password</label>
-          <input
+          <TextInput
             type="password"
-            name="password"
-            id="password"
             value={password}
             onChange={(e: ChangeEvent<HTMLInputElement>) => { setPassword(e.target.value) }}
           />
         </div>
-        <button type="submit">Submit</button>
-      </form>
 
-      <div>
-        <button onClick={() => setAppState(appState.withPage(Page.Register))}>
-          Go to register
-        </button>
-      </div>
+        <div className='mt-5'>
+          <Button type="submit">Log in</Button>
+        </div>
+      </form>
+      <Button type="button" onClick={() => {
+        setAppState(appState.withPage(Page.Register).createNewState())
+      }}>Go to register</Button>
     </>
   )
 }

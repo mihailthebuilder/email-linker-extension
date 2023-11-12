@@ -4,10 +4,6 @@ export default {
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
-  theme: {
-    extend: {},
-  },
   plugins: [],
-  safelist: process.env.NODE_ENV === 'development' ? [{ pattern: /./ }] : [],
 }
 
