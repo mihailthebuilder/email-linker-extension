@@ -2,6 +2,8 @@ import 'react'
 import { useState } from 'react'
 import { useAppState } from '../Contexts'
 import { useMutation } from 'react-query'
+import TextInput from '../Components/TextInput/TextInput'
+import Button from '../Components/Button/Button'
 
 function User() {
     const { appState } = useAppState()
@@ -29,8 +31,14 @@ function User() {
         <>
             <form onSubmit={handleSubmit}>
                 <label htmlFor="link">Link to track</label>
-                <input type="text" name="link" id="link" value={linkToTrack} onChange={onInputLinkChange} />
-                <button type="submit">Submit</button>
+                <TextInput
+                    type="text"
+                    name="link"
+                    id="link"
+                    value={linkToTrack}
+                    onChange={onInputLinkChange}
+                />
+                <Button type="submit">Get tracked link</Button>
             </form>
             {trackedLink.length > 0 && <div>Tracked link is {trackedLink}</div>}
         </>
