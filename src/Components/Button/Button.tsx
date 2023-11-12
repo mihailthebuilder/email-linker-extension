@@ -7,7 +7,7 @@ interface Props extends InputHTMLAttributes<HTMLButtonElement> {
 function Button({ type, children, ...props }: Props) {
     return (
         <button
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-5"
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-5 focus:outline-none focus:shadow-outline"
             {...props}
         >
             {children}
