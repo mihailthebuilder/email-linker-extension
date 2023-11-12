@@ -15,10 +15,26 @@ function Login() {
 
   const mutation = useMutation({
     mutationFn: () => { return fetchAuthenticationToken(email, password) },
-    onSuccess: async (token) => {
+    onSuccess: async (response) => {
+      if (response.status === 400) {
+        let body = await response.text()
+        body = body.replace(/"/g, "")
+        setAppState(appState.withNotification(body).createNewState())
+        return
+      }
+
+      if (!response.ok) {
+        setAppState(appState.withNotification("Something went wrong when calling our API. Please reach out to us to resolve it.").createNewState())
+        return
+      }
+
+      const token = await response.text()
       await storeAuthenticationTokenInBrowser(token)
       setAppState(appState.withPage(Page.User).withAuthenticationToken(token).withNotification("").createNewState())
     },
+    onError: (error: Error) => {
+      setAppState(appState.withNotification(`Something went wrong inside the extension. Error message: ${error.message}`).createNewState())
+    }
   })
 
   const handleSubmit = async (e: FormEvent) => {
@@ -68,20 +84,13 @@ async function storeAuthenticationTokenInBrowser(token: string) {
 }
 
 const fetchAuthenticationToken = async (email: string, password: string) => {
-  const response = await fetch(import.meta.env.VITE_API_URL + "/auth/login", {
+  return fetch(import.meta.env.VITE_API_URL + "/auth/login", {
     method: "POST",
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({ email, password }),
   });
-
-  if (!response.ok) {
-    throw new Error("Failed to register")
-  }
-
-  const data = await response.text() as string
-  return data;
 }
 
 export default Login;
