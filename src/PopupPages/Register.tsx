@@ -22,13 +22,28 @@ function Register() {
 
   const mutation = useMutation({
     mutationFn: () => { return register(email, password) },
-    onSuccess: () => {
+    onSuccess: async (response) => {
+      if (response.status === 400) {
+        let body = await response.text()
+        body = body.replace(/"/g, "")
+        setAppState(appState.withNotification(body).createNewState())
+        return
+      }
+
+      if (!response.ok) {
+        setAppState(appState.withNotification("Something went wrong when calling our API. Please reach out to us to resolve it.").createNewState())
+        return
+      }
+
       setAppState(
         appState
           .withNotification("You'll receive an email in the next 15 minutes to verify your account. You can log in once the account has been verified.")
           .withPage(Page.Login)
           .createNewState()
       )
+    },
+    onError: (error: Error) => {
+      setAppState(appState.withNotification(`Something went wrong inside the extension. Error message: ${error.message}`).createNewState())
     }
   })
 
@@ -75,18 +90,14 @@ function Register() {
 }
 
 
-const register = async (email: string, password: string) => {
-  const response = await fetch(import.meta.env.VITE_API_URL + "/auth/register", {
+const register = (email: string, password: string) => {
+  return fetch(import.meta.env.VITE_API_URL + "/auth/register", {
     method: "POST",
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({ email, password }),
   });
-
-  if (!response.ok) {
-    throw new Error("Failed to register")
-  }
 }
 
 
