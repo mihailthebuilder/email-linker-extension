@@ -4,15 +4,28 @@ import { useAppState } from '../Contexts'
 import { useMutation } from 'react-query'
 import TextInput from '../Components/TextInput/TextInput'
 import Button from '../Components/Button/Button'
+import { Page } from '../enums'
 
 function User() {
-  const { appState } = useAppState()
+  const { appState, setAppState } = useAppState()
   const [linkToTrack, setLinkToTrack] = useState("")
   const [trackedLink, setTrackedLink] = useState("")
 
   const mutation = useMutation({
     mutationFn: () => { return fetchTrackedLink(linkToTrack, appState.authenticationToken, "") },
-    onSuccess: (trackedLink) => {
+    onSuccess: async (response) => {
+      if (response.status === 401) {
+        setAppState(appState.withPage(Page.Login).withAuthenticationToken("").withNotification("Please log in again.").createNewState())
+        return
+      }
+
+      if (!response.ok) {
+        setAppState(appState.withNotification("Something went wrong when calling our API. Please reach out to us to resolve it.").createNewState())
+        return
+      }
+
+      const trackedLink = await response.text()
+
       setTrackedLink(trackedLink)
     }
   })
@@ -24,7 +37,9 @@ function User() {
 
   const onInputLinkChange = (event: React.FormEvent<HTMLInputElement>) => {
     setLinkToTrack(event.currentTarget.value)
-    setTrackedLink("")
+    if (trackedLink.length > 0) {
+      setTrackedLink("")
+    }
   }
 
   return (
@@ -70,7 +85,7 @@ function TrackedLink({ link }: { link: string }) {
 }
 
 async function fetchTrackedLink(url: string, authenticationToken: string, emailSubject: string) {
-  const response = await fetch(import.meta.env.VITE_API_URL + "/user/tracklink", {
+  return fetch(import.meta.env.VITE_API_URL + "/user/tracklink", {
     method: "POST",
     headers: {
       'Content-Type': 'application/json',
@@ -78,12 +93,6 @@ async function fetchTrackedLink(url: string, authenticationToken: string, emailS
     },
     body: JSON.stringify({ url, emailSubject }),
   });
-
-  if (!response.ok) {
-    throw new Error("Failed to register")
-  }
-
-  return response.text()
 }
 
 export default User
