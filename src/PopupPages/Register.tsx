@@ -62,7 +62,7 @@ function Register() {
           setAppState(appState.withPage(Page.Login).withNotification("").createNewState())
         }}
       >
-        Go to register
+        Go to log in
       </Button>
     </>
   )
