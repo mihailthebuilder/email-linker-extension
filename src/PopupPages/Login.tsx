@@ -83,7 +83,7 @@ async function storeAuthenticationTokenInBrowser(token: string) {
   await chrome.storage.local.set({ authenticationToken: token })
 }
 
-const fetchAuthenticationToken = async (email: string, password: string) => {
+const fetchAuthenticationToken = (email: string, password: string) => {
   return fetch(import.meta.env.VITE_API_URL + "/auth/login", {
     method: "POST",
     headers: {
