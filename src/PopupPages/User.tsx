@@ -36,6 +36,12 @@ function User() {
     mutation.mutate()
   }
 
+  const handleSignOut = async (e: React.FormEvent) => {
+    e.preventDefault()
+    await chrome.storage.local.remove(["authenticationToken"])
+    setAppState(appState.withPage(Page.Login).withAuthenticationToken("").createNewState())
+  }
+
   const onLinkInputChange = (event: React.FormEvent<HTMLInputElement>) => {
     setLinkToTrack(event.currentTarget.value)
     if (trackedLink.length > 0) {
@@ -71,6 +77,7 @@ function User() {
         />
         <Button type="submit">Get tracked link</Button>
       </form>
+      <Button type="button" onClick={handleSignOut}>Sign out</Button>
       {trackedLink.length > 0 && <TrackedLink link={trackedLink} />}
     </>
 
