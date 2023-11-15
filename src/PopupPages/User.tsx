@@ -9,10 +9,11 @@ import { Page } from '../enums'
 function User() {
   const { appState, setAppState } = useAppState()
   const [linkToTrack, setLinkToTrack] = useState("")
+  const [linkTag, setLinkTag] = useState("")
   const [trackedLink, setTrackedLink] = useState("")
 
   const mutation = useMutation({
-    mutationFn: () => { return fetchTrackedLink(linkToTrack, appState.authenticationToken, "") },
+    mutationFn: () => { return fetchTrackedLink(linkToTrack, appState.authenticationToken, linkTag) },
     onSuccess: async (response) => {
       if (response.status === 401) {
         setAppState(appState.withPage(Page.Login).withAuthenticationToken("").withNotification("Please log in again.").createNewState())
@@ -35,8 +36,15 @@ function User() {
     mutation.mutate()
   }
 
-  const onInputLinkChange = (event: React.FormEvent<HTMLInputElement>) => {
+  const onLinkInputChange = (event: React.FormEvent<HTMLInputElement>) => {
     setLinkToTrack(event.currentTarget.value)
+    if (trackedLink.length > 0) {
+      setTrackedLink("")
+    }
+  }
+
+  const onTagInputChange = (event: React.FormEvent<HTMLInputElement>) => {
+    setLinkTag(event.currentTarget.value)
     if (trackedLink.length > 0) {
       setTrackedLink("")
     }
@@ -51,7 +59,15 @@ function User() {
           name="link"
           id="link"
           value={linkToTrack}
-          onChange={onInputLinkChange}
+          onChange={onLinkInputChange}
+        />
+        <label htmlFor="tag">Add a tag (optional)</label>
+        <TextInput
+          type="text"
+          name="tag"
+          id="tag"
+          value={linkTag}
+          onChange={onTagInputChange}
         />
         <Button type="submit">Get tracked link</Button>
       </form>
@@ -62,7 +78,6 @@ function User() {
 }
 
 function TrackedLink({ link }: { link: string }) {
-
   const [linkCopied, setLinkCopied] = useState(false)
 
   const copyLinkToClipBoard = () => {
@@ -84,14 +99,14 @@ function TrackedLink({ link }: { link: string }) {
   )
 }
 
-async function fetchTrackedLink(url: string, authenticationToken: string, emailSubject: string) {
+async function fetchTrackedLink(url: string, authenticationToken: string, tag: string) {
   return fetch(import.meta.env.VITE_API_URL + "/user/tracklink", {
     method: "POST",
     headers: {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${authenticationToken}`
     },
-    body: JSON.stringify({ url, emailSubject }),
+    body: JSON.stringify({ url, tag }),
   });
 }
 
