@@ -93,16 +93,16 @@ function TrackedLink({ link }: { link: string }) {
   }
 
   return (
-    <>
+    <div className="mb-3">
       <div>Tracked link (click to copy to clipboard)</div>
       <div
-        className="bg-gray-800 p-1 rounded shadow-md text-white cursor-pointer"
+        className="bg-gray-800 p-1 mt-3 rounded shadow-md text-white cursor-pointer"
         onClick={copyLinkToClipBoard}
       >
         {link}
       </div>
-      {linkCopied && <div>Copied!</div>}
-    </>
+      {linkCopied && <div className="mt-1">Copied!</div>}
+    </div>
   )
 }
 
