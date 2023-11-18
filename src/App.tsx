@@ -19,7 +19,7 @@ const queryClient = new QueryClient()
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <EmailLinkerApp />
+      <Layout />
     </QueryClientProvider>
   )
 }
@@ -32,7 +32,7 @@ const RouteToPage: { [key in Page]: React.ReactElement } = {
 };
 
 
-function EmailLinkerApp() {
+function Layout() {
   const [appState, setAppState] = useState(new AppState())
 
   useEffect(() => {
@@ -55,6 +55,9 @@ function EmailLinkerApp() {
     <main className="px-7 py-5 bg-cyan-950 text-[1.25rem] text-sky-50">
       <AppContext.Provider value={{ appState, setAppState }}>
         {RouteToPage[appState.page]}
+        <div className="text-sm">
+          Confused about something? Check out the <a className="text-blue-300" href="https://lnku.us/r/KACJKJDp">Chrome Web Store listing</a>.
+        </div>
         {appState.notification.length > 0 && <div>{appState.notification}</div>}
       </ AppContext.Provider>
     </main>
