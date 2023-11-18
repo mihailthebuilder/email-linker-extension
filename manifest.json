@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
-  "name": "Link Tracking",
-  "version": "1.0.0",
+  "name": "Email Link Click Tracking",
+  "version": "1.0.1",
   "action": {
     "default_popup": "index.html"
   },
@@ -14,5 +14,5 @@
     "48": "public/black-hole-48.png",
     "128": "public/black-hole-128.png"
   },
-  "description": "The easiest way to track link clicks."
+  "description": "The easiest way to track clicks on links added inside your emails. Also can be used in social media posts and chat messages!"
 }
